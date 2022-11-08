@@ -103,14 +103,22 @@ describe('App 2e2 ', () => {
           .post('/auth/signin',)
           .withBody(dto)
           .expectStatus(200)
-          .stores('userAt', 'access_token ')
+          .stores('userAt', 'access_token')
       })
     })
   })
 
   describe('User',()=>{
     describe('GET me',()=>{
-
+      it('should get current user', () => {
+        return pactum
+          .spec()
+          .get('/users/me',)
+          .withHeaders({
+            Authorization: 'Bearer $S{userAt}'
+          })
+          .expectStatus(200)
+      })
     })
 
     describe('Edit user',()=>{
