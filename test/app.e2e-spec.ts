@@ -4,8 +4,9 @@ import { AppModule } from '../src/app.module';
 import { PrismaService } from '../src/prisma/prisma.service';
 import * as pactum from 'pactum'
 import { AuthDto } from '../src/auth/dto/auth.dto';
+import { EditUserDto } from '../src/user/dto/edit-user.dto';
 
-describe('App 2e2 ', () => {
+describe('App e2e ', () => {
   let app: INestApplication;
   let prisma: PrismaService;
   beforeAll(async () => {  
@@ -122,7 +123,22 @@ describe('App 2e2 ', () => {
     })
 
     describe('Edit user',()=>{
-
+      it('should edit user', () => {
+        const dto: EditUserDto= {
+          firstName: "Angeloni",
+          email: "angelonisrael11@gmail.com"
+        }
+        return pactum
+          .spec()
+          .patch('/users')
+          .withHeaders({
+            Authorization: 'Bearer $S{userAt}'
+          })
+          .withBody(dto)
+          .expectStatus(200)
+          .expectBodyContains(dto.firstName)
+          .expectBodyContains(dto.email);
+      })
     })
   })
 
